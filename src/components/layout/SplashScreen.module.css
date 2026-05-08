@@ -1,0 +1,274 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ink);
+  cursor: pointer;
+}
+
+/* paper texture */
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/images/rough-bg.png');
+  background-size: cover;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+}
+
+/* ambient glow */
+.glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,57,10,.15) 0%, rgba(200,57,10,.04) 50%, transparent 70%);
+  z-index: 1;
+  pointer-events: none;
+  animation: glowExpand 2.8s var(--ease) 0.2s forwards;
+}
+@keyframes glowExpand {
+  from { width: 0; height: 0; }
+  to   { width: 900px; height: 900px; }
+}
+
+/* vertical stage lines */
+.stageLine {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,169,110,.06), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* SPLIT HALVES */
+.halfTop, .halfBot {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50%;
+  background: var(--ink);
+  z-index: 10;
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.halfTop { top: 0; }
+.halfBot { bottom: 0; }
+
+.halfTop::before, .halfBot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/images/rough-bg.png');
+  background-size: cover;
+  opacity: 0.05;
+  mix-blend-mode: screen;
+}
+
+/* EXIT animation */
+.exit .halfTop { transform: translateY(-100%); }
+.exit .halfBot { transform: translateY(100%); }
+
+/* BOTANICALS */
+.botanical {
+  position: absolute;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0;
+}
+.leafTL {
+  top: 8%; left: 6%;
+  animation: leafIn 1s var(--ease) 2.4s forwards, leafFloat 8s ease-in-out 3.4s infinite;
+}
+.leafBR {
+  bottom: 8%; right: 6%;
+  transform: rotate(170deg) scaleX(-1);
+  animation: leafInBr 1s var(--ease) 2.6s forwards, leafFloatBr 9s ease-in-out 3.6s infinite;
+}
+.chilliTR {
+  top: 12%; right: 8%;
+  animation: spiceIn .8s var(--ease) 2.8s forwards;
+}
+.chilliTBL {
+  bottom: 14%; left: 7%;
+  transform: rotate(145deg);
+  animation: spiceIn .8s var(--ease) 2.9s forwards;
+}
+.citrusBR {
+  bottom: 18%; right: 10%;
+  animation: spiceIn .8s var(--ease) 3s forwards;
+}
+
+@keyframes leafIn   { from { opacity: 0; transform: scale(.7); } to { opacity: .45; transform: scale(1); } }
+@keyframes leafInBr { from { opacity: 0; } to { opacity: .35; } }
+@keyframes spiceIn  { from { opacity: 0; } to { opacity: .35; } }
+@keyframes leafFloat   { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+@keyframes leafFloatBr { 0%,100% { transform: rotate(170deg) scaleX(-1) translateY(0); } 50% { transform: rotate(170deg) scaleX(-1) translateY(-8px); } }
+
+/* CENTER STAGE */
+.stage {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+/* PLATE */
+.plateWrap {
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: plateAppear .6s var(--ease) .8s forwards;
+}
+@keyframes plateAppear {
+  from { opacity: 0; transform: scale(.7); }
+  to   { opacity: 1; transform: scale(1);  }
+}
+
+.plateOrbit {
+  stroke: rgba(200,57,10,.18);
+  stroke-width: .8;
+  fill: none;
+  stroke-dasharray: 6 10;
+  animation: orbitSpin 12s linear infinite;
+  transform-origin: 70px 70px;
+}
+@keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.plateOuter {
+  stroke: rgba(201,169,110,.35);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  animation: drawStroke 1.2s var(--ease) 1s forwards;
+}
+.plateInner {
+  stroke: rgba(201,169,110,.2);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 340;
+  stroke-dashoffset: 340;
+  animation: drawStroke 1s var(--ease) 1.2s forwards;
+}
+.plateCenter {
+  fill: rgba(201,169,110,.04);
+  opacity: 0;
+  animation: fadeIn .8s var(--ease) 1.6s forwards;
+}
+.plateDish {
+  fill: none;
+  stroke: rgba(200,57,10,.25);
+  stroke-width: 1;
+  stroke-dasharray: 180;
+  stroke-dashoffset: 180;
+  animation: drawStroke .9s var(--ease) 1.7s forwards;
+}
+.plateFork {
+  stroke: rgba(201,169,110,.3);
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: drawStroke .8s var(--ease) 1.4s forwards;
+}
+.plateKnife {
+  stroke: rgba(201,169,110,.3);
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: drawStroke .8s var(--ease) 1.55s forwards;
+}
+.plateDot {
+  fill: var(--ember);
+  opacity: 0;
+  transform-origin: 70px 70px;
+  animation: dotPop .5s var(--ease2) 2s forwards;
+}
+@keyframes drawStroke { to { stroke-dashoffset: 0; } }
+@keyframes dotPop     { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+
+/* LOGO */
+.logo {
+  font-family: var(--font-script);
+  font-size: clamp(4rem, 10vw, 7.5rem);
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 6px;
+  clip-path: inset(0 100% 0 0);
+  animation: logoReveal 1.2s var(--ease) 2s forwards;
+}
+@keyframes logoReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0);   }
+}
+
+/* TAGLINE */
+.tagline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(250,250,247,.35);
+  opacity: 0;
+  animation: fadeUp .8s var(--ease) 3s forwards;
+}
+
+/* PROGRESS DOTS */
+.progress {
+  display: flex;
+  gap: 8px;
+  margin-top: 40px;
+  opacity: 0;
+  animation: fadeIn .5s var(--ease) 2.8s forwards;
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  transition: background .4s, transform .4s var(--ease2);
+}
+.dotFilled {
+  background: var(--ember);
+  transform: scale(1.3);
+}
+
+/* HINT */
+.hint {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.55rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(250,250,247,.2);
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn .6s var(--ease) 3.5s forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hint svg {
+  animation: hintBounce 1.5s ease-in-out infinite;
+}
+@keyframes hintBounce { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
+
+@media (max-width: 480px) {
+  .logo { font-size: 3.5rem; }
+}
